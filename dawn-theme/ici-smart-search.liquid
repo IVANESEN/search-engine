@@ -1,0 +1,96 @@
+{% comment %}
+  ICI SMART SEARCH - Buscador inteligente con IA
+  
+  Reemplaza el buscador nativo de Dawn con un buscador que entiende
+  sinonimos, terminos coloquiales salvadorenos y consultas en lenguaje natural.
+  
+  COMO INSTALAR:
+  1. Subir este archivo a snippets/ici-smart-search.liquid
+  2. Subir assets/ici-smart-search.js y assets/ici-smart-search.css
+  3. En sections/header.liquid, reemplazar el form de busqueda por:
+     {% render 'ici-smart-search' %}
+  4. Configurar la URL del API en theme settings (o hardcodear abajo)
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'ici-smart-search.css' | asset_url }}">
+
+<div class="ici-smart-search" data-api-url="{{ settings.ici_search_api_url | default: 'https://tu-backend.com' }}">
+  <button class="ici-search-trigger" type="button" aria-label="Abrir buscador inteligente">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="m21 21-4.35-4.35"/>
+    </svg>
+    <span>Buscar</span>
+  </button>
+
+  <div class="ici-search-modal" hidden>
+    <div class="ici-search-backdrop" data-action="close"></div>
+    <div class="ici-search-panel" role="dialog" aria-modal="true" aria-label="Buscador ICI">
+      
+      <header class="ici-search-header">
+        <div class="ici-search-input-wrap">
+          <svg class="ici-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input 
+            type="text" 
+            class="ici-search-input" 
+            placeholder="Que necesitas? Ej: algo para colgar un cuadro pesado..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="ici-search-close" data-action="close" aria-label="Cerrar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="ici-search-hint">
+          <span class="ici-pulse"></span>
+          <span>Entiende como busca un salvadoreno · "desarmador", "chorro", "wincha"...</span>
+        </div>
+      </header>
+
+      <div class="ici-search-body">
+        
+        <div class="ici-search-empty" data-state="empty">
+          <p class="ici-search-empty-title">Probá una busqueda en lenguaje natural</p>
+          <div class="ici-search-examples">
+            <button class="ici-example-chip" data-example="necesito algo para colgar un cuadro pesado en pared de concreto">Algo para colgar cuadro pesado</button>
+            <button class="ici-example-chip" data-example="que necesito para pintar un cuarto de 3x4 metros">Qué uso para pintar un cuarto</button>
+            <button class="ici-example-chip" data-example="desarmador phillips para tornillo pequeno">Desarmador phillips chiquito</button>
+            <button class="ici-example-chip" data-example="chorro de jardin para manguera">Chorro de jardín para manguera</button>
+            <button class="ici-example-chip" data-example="taladro inalambrico truper">Taladro inalámbrico Truper</button>
+          </div>
+        </div>
+
+        <div class="ici-search-loading" data-state="loading" hidden>
+          <div class="ici-loading-bar"></div>
+          <p>Entendiendo tu busqueda...</p>
+        </div>
+
+        <div class="ici-search-results" data-state="results" hidden>
+          <div class="ici-search-explanation"></div>
+          <div class="ici-search-grid"></div>
+          <div class="ici-search-no-results" hidden>
+            <p>No encontramos coincidencias para esa busqueda.</p>
+            <p class="ici-no-results-hint">Probá con palabras mas simples o el nombre del producto.</p>
+          </div>
+        </div>
+
+        <div class="ici-search-error" data-state="error" hidden>
+          <p>Algo fallo. Intentá de nuevo en un momento.</p>
+        </div>
+
+      </div>
+
+      <footer class="ici-search-footer">
+        <span>Powered by IA · ICI El Salvador</span>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'ici-smart-search.js' | asset_url }}" defer></script>
